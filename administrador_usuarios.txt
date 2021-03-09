@@ -1,0 +1,85 @@
+ROLES
+	-> Roles (funções), users (usuarios)
+	-> Atualmente roles e users são ALIAS no postgresql
+	-> Existe herança, um sub-grupo pega as permissões do grupo
+
+-> Associação entre roles
+		-> Quando um role assume as permissões de outra role
+				-> Necessário a opção INHERIT
+		-> IN ROLE (passa a pertencer a role informada)
+		-> ROLE (a role informada passa a pertencer a uma nova role)
+
+		Após a criação de um role
+		-> GRANT [role a ser concedida] TO [role a assumir as permissões]
+
+# CREATE ROLE name [[with] option [...]]
+							SUPER USER | NOSUPERUSER
+							CREATEROLE | NOCREATEROLE
+							CREATEDB	| NOCREATEDB
+							INGERIT		| NOINGERIT
+							LOGIN		| NO LOGIN
+							REPLICATION	| NOREPLICATION
+							CONNECTION LIMIT
+							ENCRYPTED PASSWORD | PASSWORD NULL
+							IN ROLE role_name
+							ADMIN role_name
+							USER role_name
+							SYSID uid
+
+# CREATE ROLE administradores
+# CREATE ROLE professores NOCREATEDB NOCREATEROLE INHERIT NOLOGIN NOBYPASSRLS CONNECTION LIMIT 1;
+# CREATE ROLE rafael LOGIN CONNECTION LIMIT 1 PASSWORD 'rafael123' IN ROLE professores;
+		role rafael passa a assumir as permissões da role professores
+
+# CREATE ROLE rafael LOGIN CONNECTION LIMIT 1 PASSWORD 'rafael123' ROLE professores;
+		role professor passa a fazer parte da role rafael assumindo as suas permissõe
+
+# CREATE ROLE rafael LOGIN CONNECTION  LIMIT 1 PASSWORD '12345';
+# GRANT professores TO daniel;
+
+# REVOKE professores FROM daniel
+		daniel não mais parte de professores
+
+# ALTER ROLE professores OPTION
+		mesmas opções que o create role
+
+# ALTER ROLE professores PASSWORD '12345'			não vai conseguir se conectar
+# ALTER ROLE rafael LOGIN PASSWORD '1233456'		vai conseguir se conectar
+
+# DROP ROLE rafael
+		exclui a role
+
+
+# CREATE ROLE alunos
+
+# psql
+# \du		lista as roles criadas, funciona apenas no psql
+# SELECT * FROM pg_roles
+# psql -U professores auladb		tentar se conectar como professores ao auladb
+
+-----------------------------------------------------------------------------------
+GRANT (São privilégios de acesso)
+	
+	-- tabela, -- coluna, -- sequence, -- database, -- domanin, -- foreign server, -- function, -- language
+	-- large object, -- schema, -- tablespace, -- type
+
+-> DATABASE
+# GRANT CREATE | CONNECT | TEMPORARY | TEMP | ALL ON DATABASE database_name TO role_specification WITH GRANT OPTION	
+# GRANT CREATE | USAGE ON SCHEMA schema_name TO role_specification WITH GRANT OPTION	
+# GRANT SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES | TRIGGER ON table_name | ALL TABLE IN SCHEMA schema_name 
+				 TO role_specification WITH GRANT OPTION
+
+# GRANT ALL ON table alunos TO professores
+# CREATE ROLE rafael LOGIN PASSWORD '12345' IN ROLE professores;
+
+# REVOKE SELECT ON ALL TABLE IN SCHEMA curso TO ROLE daniel;
+# REVOKE ALL ON ALL TABLES IN SCHEMA curso FROM rafael;
+# REVOKE ALL ON SCHEMA curso FROM rafael;
+# REVOKE ALL ON DATABASE aulas FROM rafael;
+	- Às vezes tem que revoke as permissões antes de dropar uma tabela. 
+
+# REVOKE professores FROM rafel;
+
+
+
+

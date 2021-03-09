@@ -1,0 +1,37 @@
+arquivo postgresql.conf
+	-> Onde ficam armazenadas todas as configurações do servidor
+	-> normalmente fica na pasta PGDATA
+	-> a view pg_settings guarda todas as configurações atuais
+	-> Ubuntu
+		# etc/postgresql/11/[nome do cluster]/postgresql.conf
+		# cd etc/postgresql/11/aula/	# ls -lrt
+
+	-> CentOS
+		# ls -l /var/lib/pgsql/11/data
+
+	SELECT name, setting
+	FROM pg_settings;
+	
+	show [parâmetro]
+
+	-> CONFIGURAÇÕES DE CONEXÕES
+		-> LISTEN_ADDRESSES: endereço tcp/ip das interfaces quye o servidor vai escutar, não colorar '*' nesse parâmentro
+				senão libera para coexão em qualquer número de IP
+		-> PORT: por padrão é 5432
+		-> MAX_CONNECTIONS: número máximo de conexões simultaneas
+		-> SUPERUSER_RESERVED_CONNECTIONS: número de conexões slots reservados para do banco reservada
+			para o super usuário.
+
+	-> CONFIGURAÇÕES DE AUTENTICAÇÃO
+		-> AUTHENTICATION_TIMEOUT: tempo máximo para conseguir uma conexão
+		-> PASSWORD_ENCRYPTION: algoritmo que criptografa as senhas
+		-> SSL: habilita conexão ssl
+		
+
+	-> CONFIGURAÇÕES DE MEMÓRIA
+		-> SHARED_BUFFERS: memória compartilha em cache para dados que precisam de rápido acesso. 25% recomendado
+		-> WORK_MEM: Tamanho da memória para operações am agrupamento (ORDER BY, DISTINCT)
+		-> MAINTENANCE_WORK_MEM: Tamanho para operações administrativa (VACUUEM, INDEX, ALTER TABLE)
+	
+
+

@@ -1,0 +1,12 @@
+pg_hba.conf
+	-> Faz o controle de autenticações dos usuários
+	-> local	database	user	auth-method
+	-> local	database	user	address		auth-method
+
+	-> MÉTODOS DE AUTENTICAÇÃO
+		TRUST, REJECT, MD5, PASSWORD, GSS, SSPI, KRB5, IDENT, PEER, LDAP. RADIUS, CERT, PAM
+
+pg_ident.conf
+	-> Faz o mapeamento do sistema operacional com os usuários do Banco de Dados
+	-> diretório PGDATA
+	-> opção IDENT deve ser utilizada no arquivo pg_hba.conf

@@ -1,0 +1,6 @@
+UBUNTU
+	# pg_lscluster
+	# pg_createcluster <version> <cluster name>
+	# pg_dropcluster <version> <cluster>
+	# pg_ctlcluster <version> <cluster> <action>
+		-> Start, Stop, Status, Restart

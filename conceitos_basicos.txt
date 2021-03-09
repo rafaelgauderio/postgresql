@@ -1,0 +1,51 @@
+->DADOS
+	-> São os valores brutos, registros soltos que são recolhidos e armazenados sem receber qualquer tratamento
+
+-> INFORMAÇÕES
+	-> São os dados interpretados. É quando é dado sentido aos dados.
+	-> Material do conhecimento
+	
+-> BANCO RELACIONAL
+	-> São ferramentas que demonstrar como as estruturas de dados estão organizadas e se relacionam entre si.
+	-> Classifica e organiza as informações em tabelas com linhas e colunas. 
+	-> As linhas ou tuplas são os valores e as colunas os atributos.
+	
+-> TABELAS
+	-> Coisas tangíveis
+	-> Funções: perfis de um usuário, status de compra
+	-> Eventos ou ocorrências: produtos de um pedido, histórico de dados
+
+-> COLUNAS IMPORTANTES
+	-> CHAVES PRIMÁRIAS: Campo que não se repete. Identidade da tabela. PK
+		-> Utilizadas como índice entre tabelas
+		-> Pode haver PK composta por mais de um campo
+	-> CHAVES ESTRANGÉRIAS: Valor de referências a uma PK. Serve para criar relacionamento entre tabelas. FK
+		-> Uma mesma tabela pode ter mais de uma FK
+
+-> SGBD
+	-> Sistema de gerenciamento de banco de dados
+	-> Conjunto de programas responsáveis pelo gerenciamento de banco de dados.
+
+-> POSTGRESQL
+	-> Pode ser modificado para sua facilidade
+	-> Possível editar seu código fonte, pois é um banco open source
+	-> Arquitetura multiprocessos
+		-> Autenticação, conexões
+		-> postmanster, childs
+		-> Memória: Shared_buffers, wal_buffers, clog_buffers, lock space
+		-> Processos de escrita em disco -> Storage
+	-> Point in time recovery
+	-> Suporte a perl, python
+	-> Views, functions, procedures, triggers	
+	-> Consultas complexas e CTE (Common table expressions)
+	-> Suporte a dados geográficas (PostGIS)
+	-> Conctrole de concorrência multi-versão
+	-> https://www.postgresql.org/
+
+
+
+	
+
+
+
+

@@ -1,0 +1,91 @@
+-> DATABASE
+	-> É o Banco de dados. Grupo de schemas e seus objetos.
+	-> Schemas e objetos não podem ser comparilhados entre si
+	-> Cada banco de dados é separado um do outro, corpartilhando apenas usuários/roles
+
+-> SCHEMAS
+	-> É um grupo de objetos, como tabelas, types, views, funções.
+	-> É possível relacionar objetos entre diversos schemas.
+
+-> OBJETOS
+	-> São tabelas, types, views, funções.
+
+# CREATE DATABASE name;
+# ALTER DATABAE name RENAME TO new_name;
+# DROP DATABASE name;
+
+# CREATE SCHEMA schema_name;
+# ALTER SCHEMA name RENAME TO new_name;
+# DROP SCHEMA name;
+
+# CREATE SCHEMA IF NOT EXISTS schema_name;
+# DROP SCHEMA IF EXISTS schema_name;
+
+-> PRIMARY KEY
+	-> Conjunto de um ou mais campos em uma tabela que nunca se repetem.
+	-> Garantem a integridade do dado único.
+	-> PK composto não pode ser formando por campo opcional.
+	-> Não pode ser null, não deve conter informação volátil.
+	- Para garantir que a coluna id seja um campo sequencial que nunca se repete.
+
+-> FOREIGN KEY
+	-> Referências de PK de outras tabelas ou da mesma tabelas.
+	-> Garantir a integridade referencial entre tabelas.
+
+-> TIPOS DE DADOS
+	-> Principais: NUMERICS, CHARACTER, DATE/TIME, BOOLEAN
+	-> NUMERICS: smallint, integer, bigint, decimal, numeric, real, double precision, smallserial, serial, bigserial
+	-> CHARACTER: varchar(n) character(n), char(n), text (variable unlimited length)
+	-> DATE: timestamp, date, time, interval	timestamp e time tem a opcao with | without time zone
+	-> BOOLEAN: true, false
+
+-> DML (DATA MANUPULATION LANGUAGE)
+	INSERT, UPDATE, DELETE, SELECT
+
+-> DDL (DATA DEFINITION LANGUAGE)
+	CREATE, ALTER, DROP
+# CREATE [objeto] [nome do objeto] [opcoes];
+# ALTER [objeto] [nome do objeto] [opcoes];
+# DROP [objeto] [nome do objeto] [opcoes];
+
+# ALTER DATABASE dados_funcionarios OWNER TO diretoria;
+# CREATE SCHEMA IF NOT EXISTS bancos;
+# DROP SCHEMA IF EXISTIS bancos;
+# ALTER TABLE banco ADD COLUMN possui_poupanca BOOLEAN;
+
+# 	CREATE TABLE IF NOT EXISTS banco (
+	numero INTEGER NOT NULL;
+	nome VARCHAR(100) NOT NULL;
+	ativo BOOLEAN NOT NULL DEFAULT TRUE;
+	data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	PRIMARY KEY (numero)
+	);
+
+#	CREATE TABLE IF NOT EXISTS agencia (
+	banco_numero INTEGER NOT NULL;
+	numero INTEGER NOT NULL;
+	nome VARCHAR(100) NOT NULL;
+	ativo BOOLEAN NOT NULL DEFAULT TRUE;
+	data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	PRIMARY KEY (banco_numero,numero),
+	FOREIGN KEY (banco_numero) REFERENCES banco (numero)
+	);
+
+# 	INSERT INTO banco (codigo, nome, data)
+	VALUES (100, 'Banco Itau', now());
+# 	INSERT INTO banco (codigo, nome, data)
+	SELECT 100, 'Banco Bradesco', now();
+	
+
+# 	UPDATE banco
+	SET codigo = 510
+	WHERE codigo = 100;
+
+#	DELETE FROM banco
+	WHERE codigo = 520;
+
+# 	SELECT campos_da_tabela
+	FROM nome_da_tabela
+	WHERE condicoes
+-> Evitar sempre p SELECT *
+
