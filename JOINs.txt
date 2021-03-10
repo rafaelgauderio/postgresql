@@ -1,0 +1,77 @@
+JOIN 
+	-> Usado para união de tabelas
+
+	-> JOIN ou INNER JOIN
+		-> Somente os dados que pertencem a essa relação = intersecção
+		-> Sempre que possível usar PK, FK ou campos que são índices nos JOINs
+
+	# 	SELECT tabela1.campos, tabela2.campos
+		FROM tabela1
+		JOIN tabela2
+		ON tabela2.campo = tabela1.campo
+
+	-> LEFT JOIN ou LEFT OUTER JOIN
+		-> tabelas a esquerda por completo, as da direita somente se houver relacionamento, senão houver traz "VAZIO"
+
+	# 	SELECT tabela1.campos, tabela2.campos
+		FROM tabela1
+		LEFT JOIN tabela2
+		ON tabela2.campo = tabela1.campo
+
+	-> RIGHT JOIN
+		-> tabelas a direita por completo, as da esquerda somente se houver relacionamento, senão houver traz "VAZIO"
+
+	# 	SELECT tabela1.campos, tabela2.campos
+		FROM tabela1
+		RIGHT JOIN tabela2
+		ON tabela2.campo = tabela1.campo	
+
+	-> FULL JOIN
+		-> Vai trazer todas as relações possíveis, mesmo que esteja vazio algum campo da tabela correspondente
+
+	#	SELECT tabela1.campos, tabela2.campos
+		FROM tabela1
+		FULL OUTER JOIN tabela2
+		ON tabela2.campo = tabela1.campo
+
+	-> CROSS JOIN
+		-> Todos os dados de uma tabela serão cruzados com todos os dados da tabela
+				referenciada no CROSS JOIN criando uma matriz
+	#	SELECT tabela1.campos, tabela2.campos
+		FROM tabela1
+		CROSS JOIN tabela2
+
+	-- Evitar esse tipo de consulta, consume muitos recursos do banco
+	-- É bom para ver qual todas as possbilidades de um variável pode assumir de acordo o banco
+		
+Exemplos
+
+	#	SELECT count(1) FROM banco; --  151
+	#	SELECT count(1) FROM agencia; -- 296
+
+	#	SELECT banco.numero, banco.nome, agencia.numero, agencia.nome
+		FROM banco
+		INNER JOIN agencia
+		ON agencia.banco_numero = banco.numero;
+
+	#	SELECT COUNT(DISTINCT banco.numero)
+		FROM banco
+		JOIN agencia
+		ON agencia.banco_numero = banco.numero;
+
+		-- retornando todas os bancos possíveis e mais todos bancos sem agência
+	#	SELECT banco.numero, banco.nome, agencia.numero, agencia.nome -- 438 registros
+		FROM banco
+		LEFT OUTER JOIN agencia
+		ON agencia.banco_numero = banco.numero;	
+
+	# 	SELECT agencia.numero, agencia.nome, banco.numero, banco.nome -- 438 registros, invertendo a ordem das tabelas
+		FROM agencia
+		RIGHT JOIN banco 
+		ON banco.numero = agencia.banco_numero;
+
+	#	SELECT banco.numero, banco.nome, agencia.numero, agencia.nome -- 438 registros, pois não temos nenhum agência sem banco
+		FROM banco
+		FULL JOIN agencia
+		ON agencia.banco_numero = banco.numero;	
+

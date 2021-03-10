@@ -1,0 +1,47 @@
+CTE - Common Table Expressions - CTE
+	-> Forma auxiliar de ornaziar "statements", ou seja, bloco de códigos.
+	-> Indicado para consultas muito grande. Gera tabelas temporárias e cria relacionamento entre elas
+	-> INSERT, UPDATE, SELECT, DELETE
+	
+WITH STATEMENT
+
+	# WITH nome1 AS (
+		SELECT (campos.)
+		FROM tabelaA
+		WHERE
+	), nome2 AS (
+		SELECT (campos,)
+		FROM tabelaB
+		WHERE
+	)	
+		SELECT nome1.capmpos, nome2.campos,
+		FROM nome1
+		JOIN nome2
+		ON nome2,campo = nome1.campo
+
+	-> Exemplo
+
+	#	WITH tbl_tmp AS (
+			SELECT numero, nome
+			FROM banco
+	)
+		SELECT numero, nome
+		FROM tbl_tmp_banco
+
+	-- Fazendo um join com a tabela temporária
+	# WITH params AS (
+			SELECT 215 AS banco_numero
+		), tbl_tmp_banco AS (
+			SELECT numero, nome
+			FROM banco
+			JOIN params ON params.banco_numero = banco.numero
+		)
+		SELECT numero, nome
+		FROM tbl_tmp_banco;
+
+	-- Fazendo um sub select
+	#	SELECT banco.numero, banco.nome
+		FROM banco
+		JOIN (
+			SELECT 213 AS banco_numero
+		) parametro ON parametro.banco_numero = banco.numero;

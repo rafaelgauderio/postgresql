@@ -1,0 +1,43 @@
+-> PGADMIN
+		-> Interface web para administrar o banco de dados
+
+		-> IMPORTANTE PARA CONEXÃO
+				-> liberar acesso ao postgresql.conf
+				-> liberar acesso do usuário do banco pg_hba.conf
+				-> criar editar usuários
+
+# pg_lsclusters
+# vim /etc/postgresql/versao/nome_do_cluster/postgresql.conf
+# vim /etc/postgresql/11/aula/postgresql.conf
+				listen_addresses = '*'
+# pg_ctlcluster 11 aula start
+# psql 				= binário do postgresql
+# psql -h 127.0.0.1 -p 5432 -U postgress 
+# pstql local porta usuario nome_do_banco
+
+# ALTER USER postgress PASSWORD 'rafael123';
+# \q					= sair do banco
+		
+# vim /etc/postgress/11/aula/pg_hba.conf
+				# database administrative login by Unix domain socket
+				local 		all 		postgress		md5
+# pg_cluster 11 aula reload				= para pegar as conf alteradas
+# psql 				= agora vai pedir a senha setada
+
+DENTRO DO PGADMIN
+		-> Servers -> Object -> Create -> Server Group
+		-> Servers -> Object -> Create -> Server
+				-> host: 127.0.0.1		-> nome_do_banco -> username -> password
+						-> Se estiver tudo correto tem que conectar com os bancos do cluster
+		-> Dentro do cluster -> Databases -> Schemas -> Objetos
+
+-> Tools
+		-> Query Tools
+# SELECT 1;
+# CREATE DATABASE auladb;
+# USE auladb
+
+
+
+
+

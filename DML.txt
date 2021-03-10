@@ -1,0 +1,88 @@
+DML / GRUD
+
+https://github.com/drobcosta/digital_innovation_one
+	-> arquivo dml.sql
+
+-> IDEMPOTÊNCIA: IF EXISTS
+	-> Propriedade que algumas operações possuem possibulitando-as de seres executadas
+			diversas vezes sem alterar o resultado após a aplicação inicial.
+	-> Exemplo: se executar o mesmo código CREATE TABLE mais de uma vez, ele dá a mesangem
+		relaciont "nome_da_tabela" alteady exists, skipping, desde que tenha o opcao IF  NOT EXISTS nome_da_tabela
+	-> Se for dar um DROP usar o IF EXISTS. É um dica de boas práticas
+
+-> MELHORES PRÁTICAS EM DDL
+	-> Importante as tabelas possuíresm campos que realmente serão utiliados e que sirvam de 
+			atributo direto a um objetivo em comum.
+	-> Criar colunas que são "atributos básicos" do objeto;
+	-> Cuidar com regras (constraints);
+	-> Cuidado com o excesso de FKs;
+	-> Cuidado com o tamanho indevido de colunhas
+			Exemplo: column CEP VARCHAR(200)
+
+#		SELECT numero FROM agencia
+		WHERE banco_numero IN (SELECT numero FROM banco WHERE nome ILIKE '%Bradesco%')
+		-- ILIKE não é case sensitive e LIKE é case sensitive
+		-- 
+		-- Esse tipo de consulta consome muita recurso do servidor
+
+SELECT - Condição (WHERE / AND / OR)
+	Primeiro e condição WHERE e depois as demais
+	<> ou !=
+	LIKE, ILIKE, IN
+	<, <=, >, >=
+
+SELECT - indepotência
+-- não é um boa prática, melhor usar o LEFT JOIN
+#		SELECT (campos,)
+		FROM tabela1
+		WHERE EXISTS (
+			SELECT (campo2,)
+			FROM tabela2
+			WHERE campo1 = valor1
+			[AND/OR campoN = valorN]
+		);
+
+SELECT *
+-- sempre evitar, usa muita recurso do banco
+
+INSERT
+
+# INSERT (campos da tabela,) VALUES (valores,);
+# INSERT (campos da tabela,) SELECT (valores,); 
+
+ON CONFLICT 
+-- Trabalhando sempre em cima de uma regra, se tiver conflito entre PK e FK
+	#		INSERT INTO agencia (banco_numero, numero,nome)
+			VALUES (341, 1 'Centro') ON CONFLICT (banco_numero,numero) DO NOTHING;
+
+UPTADE
+# UPDATE (tabela) SET campo1 = novo_valor WHERE (condicao);
+
+DELETE
+# DELETE FROM (tabela) SET campo1 = novo_valor WHERE (condicao);
+
+
+TRUNCATE
+-- Comando para "esvaziar" TABELA
+
+#		TRUNCATE TABLE ONLY name
+		[RESTART IDENTITY | CONTINUE IDENTITY] [CASCADE | RESTRICT]
+
+
+-- RESTART IDENTITY reinicia os campos seriais para um valor escolhido
+-- CONTINUE IDENTITY não reinicia os valores seriais.
+-- Por default ele não esvazia tabela com FK
+-- Com o cascade ele sai apagando a tabela e todas as outras tabelas que tiver referência.
+
+
+
+
+
+
+
+
+
+
+
+
+

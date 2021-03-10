@@ -1,0 +1,40 @@
+FUNÇÕES AGREGADAS
+	-> Visitar o site oficial do postgresql para poder ver todas
+	-> https://postgresql.org
+
+	# SELECT * FROM information_schema.columns WHERE table_name = 'banco';
+	-- Essa view ajuda a ver os campos na coluna sem ter que ficar dando SELECT * toda hora	
+	# SELECT COLUMN_NAME, data_type FROM information_schema.columns WHERE table_name = 'banco';
+
+	-> AVG
+	# SELECT AVG(*) FROM cliente_transacoe;
+	-- media de todos os valores
+
+	-> COUNT
+	# SELECT COUNT(numero) FROM clientes;
+	-- conta o numero de clientes
+
+	# 	SELECT COUNT(id), tipo_transaco_id
+		FROM cliente_transacoes
+		GROUP BY tipo_transacao_id
+		HAVING COUNT(id) > 100;
+
+	# 	SELECT COUNT(numero,email)
+		FROM clientes WHERE 
+		ILIKE '%gmail.com'
+		GROUP BY email;		
+
+	-> MAX
+	# SELECT MAX(valor) FROM cliente_transacoes;
+	# 	SELECT MAX(valor), tipo_transacao_id FROM cliente_transacoes
+		GROUP BY tipo_transacao;
+	-- traz o máximo valor de casa tipo de transação 
+
+	-> MIN
+	# SELECT MIX(valor) FROM cliente_transacoes;
+
+	-> SUM
+	# 	SELECT SUM(valor), tipo_transacao_id
+		FROM cliente_transacoes
+		GROUP BY tippo_transacao_id
+		ORDER BY tipo_transacao_id DESC;
