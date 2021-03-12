@@ -1,0 +1,40 @@
+-> TRANSAÇÕES
+		-> Conceito de múltiplas etapas reunidos em apenas 1 transação, onde
+				o resultado precisa ser tudo ou nada.
+
+	#	BEGIN
+			UPDATE conta SET valor = valor - 100.00
+			WHERE nome = 'Aline';
+
+			UPDATE conta SET valor - valor + 100
+			WHERE nome = 'Rafael';
+
+		COMMIT;
+
+		-- se acontecer qualquer erro no meio dessa transação acontece um ROLLBACK
+		-- Não tem como o dinheiro se perder, saiu da conta da Aline e não entrar na conta do Rafael
+		-- Outras pessoas não podem ver o que está acontecendo na transação até que a transação seja comitada
+		-- Enquanto estiver dentro da transação, pode ir validando um campo por vez
+
+	#	BEGIN
+			UPDATE conta SET valor = valor - 100.00
+			WHERE nome = 'Aline';
+
+			UPDATE conta SET valor - valor + 100
+			WHERE nome = 'Rafael';
+
+		ROLLBACK;
+
+	#	BEGIN
+			UPDATE conta SET valor = valor - 100.00
+			WHERE nome = 'Aline'
+
+		SAVEPOINT my_savepoint;
+
+			UPDATE conta SET valor - valor + 100
+			WHERE nome = 'Rafael';
+			-- Não é para Rafael é para João
+
+		ROLLBACK TO my_savepoint;
+				UPDATE conta SET valor - valor + 100
+				WHERE nome = 'João';
