@@ -1,0 +1,173 @@
+-> FUNÇÕES
+	-> Conjunto de códigos que serão executados DENTRO DE UM TRANSAÇÃO com a finalidade
+		de facilitar a programção e obter a reutilização de código.
+	
+-> TIPOS DE FUNÇÕES
+	-> query languague functios (SQL)
+	-> procedural language functions (PL/pgSQL ou PL/py)
+	-> internal functions;
+	-> C-Language functions;
+
+	-> Foco usado em USER DEFINED FUNCTIONS;
+	
+	-> PL/PGSQL : linguagem exclusiva para o Postgresql. Mas o postgresql permite outras linguagens dentro dele
+			como php, py, ruby, java, lua
+
+-> IDEMPOTÊNCIA: OR REPLACE
+	-> Mesmo nome;
+	-> Mesto tipo de retorno;
+	-> Mesmo número de argumentos.
+	
+-> RETURNS
+	-> integer, char, varchar, boolean, row, table, json
+
+-> SEGURANÇA
+	-> SECURITY
+		-> INVOKER: padrão, função executada com as permissões do usuário que estão executando a função
+		-> DEFINER: executa com as permissões de quem criou a função
+
+-> COMPORTAMENTO
+	-> IMMUTABLE: Não pode alterar o banco de dados. Evitar Selects
+	-> STABLE: Não pode altear o banco de dados. Pode ter selects
+	-> VOLATILLE: default. Aceita todos os comandos.
+
+-> BOAS PRÁTICAS
+	-> CALLED ON NULL INPUT: Padrão. Se um argumento for null a função é executada mesmo assim
+	-> RETURNIS NULL ON NULL INPUT: Se algum parâmetro for null, ela retorna null.
+
+-> RECURSOS
+	-> COST: custo em unidades de CPU
+	-> ROWS: Número estimado de linhas que será analisada pelo planner
+
+-> SQL FUNCTIONS
+	-> Não é possível usar TRANSAÇÕES
+
+#	CREATE OR REPLACE FUNCTION somar(num1 INTEGER, num2 INTEGER)
+	RETURNS INTEGER
+	SECURITY DEFINER
+	RETURNS NULL ON NULL INPUT
+	LANGUAGE SQL
+	AS $$
+		SELECT num1 + num2;
+	$$;
+
+
+#	--Executando a função 
+	SELECT somar(15,3)	
+
+# 	SELECT somar(7,null) 
+	-- vai retornar um null
+
+# 	--coalesce vai retornar o primeiro valor não nulo de uma linha
+	SELECT COALESCE(null,'daniel','rafael') 
+	-- vai retornar daniel
+
+#	CREATE OR REPLACE FUNCTION somar(num1 INTEGER, num2 INTEGER)
+	RETURNS INTEGER
+	SECURITY DEFINER
+	RETURNS CALLED ON NULL INPUT
+	LANGUAGE SQL
+	AS $$
+		SELECT COALESCE(num1,50) + COALESCE(num2,50);
+	$$;
+
+# 	SELECT somar(1,null)
+	-- ao invés de retonrar null, vai retornar 51
+
+#	-- adicionando um banco na tabela
+	CREATE OR REPLACE FUNCTION banco_adicionar(p_numero INTEGER, p_nome VARCHAR, p_ativo BOOLEAN)
+	RETURNS TABLE (numero INTEGER, nome VARCHAR)
+	SECURITY DEFINER
+	RETURNS NULL ON NULL INPUT
+	LANGUAGE SQL
+	AS $$
+		INSERT INTO banco (numero, nome, ativo)
+		VALUES (p_numero, p_nome, p_ativo);
+			
+		SELECT numero, nome	
+		FROM banco
+		WHERE numero = p_numero;
+	$$;
+
+
+#	CREATE OR REPLACE FUNCTION banco_adicionar(p_numero INTEGER, p_nome VARCHAR, p_ativo BOOLEAN)
+	RETURN BOOLEAN
+	LANGUAGE PLPGSQL
+	AS $$
+	DECLARE variavel_id INTEGER;
+	BEGIN
+		SELECT into variavel_id numero FROM banco WHERE nome = p_nome;
+		IF variavel_id IS NULL THEN
+			INSERT INTO banco (numero, nome, ativo)
+			VALUES (p_numero, p_nome, p_ativo)
+		ELSE
+			RETURN FALSE;
+		END IF;
+		
+		SELECT INTO variavel_id numero FROM banco WHERE nome = p_nome;
+		IF variavel_id IS NULL THEN
+			RETURN FALSE;
+		ELSE;
+			RETURN TRUE;
+		END IF;
+	END;
+	$$;	
+
+#	CREATE OR REPLACE FUNCTION banco_adicionar(p_numero INTEGER, p_nome VARCHAR, p_ativo BOOLEAN)
+	RETURNS INTEGER
+	SECURITY INVOKER
+	LANGUAGE PLPGSQL
+	CALLED ON NULL INPUT
+	AS $$
+	DECLARE variavel_id INTEGER;
+	BEGIN
+		SELECT INTO variavel_id numero
+		FROM banco
+		WHERE numero = p_numero;
+		RETURN variavel_id;
+	END;
+	$$;
+
+#	-- usando a função
+	SELECT banco_adicionar(1,'Banco Rafael',FALSE);
+	-- retorna 1 (já tem um banco com esse número)	
+	
+#	SELECT banco_adicionar(9090,'Banco novo',FALSE);
+	-- retorna null
+			
+# 	--Melhorando a função
+	#	CREATE OR REPLACE FUNCTION banco_adicionar(p_numero INTEGER, p_nome VARCHAR, p_ativo BOOLEAN)
+	RETURNS INTEGER
+	SECURITY INVOKER
+	LANGUAGE PLPGSQL
+	CALLED ON NULL INPUT
+	AS $$
+	DECLARE variavel_id INTEGER;
+	BEGIN
+		IF p_numero IS null OR p_nome IS null OR p_ativo IS null THEN
+			RETURN 0;
+		END IF;	
+	
+		SELECT INTO variavel_id numero
+		FROM banco
+		WHERE numero = p_numero;
+		
+		IF variavel_id IS NULL THEN
+			INSERT INTO banco(numero, nome, ativo)
+			VALUES (p_numero, p_nome, p_ativo);
+		ELSE
+		RETURN variavel_id;
+		END IF;
+
+		SELECT INTO variavel_id numero
+		FROM banco
+		WHERE numero = p_numero;
+		
+		RETURN variavel_id
+	END;
+	$$;
+
+
+
+		
+
